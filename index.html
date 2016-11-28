@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src='js/flexible.js'></script>
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />-->
+<!-- <meta name="viewport" content="width=480, target-densitydpi=device-dpi, user-scalable=no" /> -->
+<meta name="author" content="xx.cn" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta http-equiv="Pragma" content="no-cache"/>
+<link rel="stylesheet" href="css/css.css">
+<title>同屏互动</title>
+<script src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>
+<script src="https://cdn.wilddog.com/js/client/current/wilddog.js" ></script>
+</head>
+<body>
+<div class='img1'></div>
+    <p class='p1'>使用另一台手机扫描打开并适度倾斜手机试试。</p>
+    <p class='p2'>屏幕中的手机模型将和你的手机同步哦！</p>
+<div id="outer">
+    <div id="group">
+        <div class="page" id="page1"></div>
+        <div class="page" id="page2"></div>
+        <div class="page" id="page3"></div>
+        <div class="page" id="page4"></div>
+        <div class="page" id="page5"></div>
+        <div class="page" id="page6"></div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">  
+var ref = new Wilddog("https://gonefour.wilddogio.com/");
+var authData = ref.getAuth();
+if(typeof(FileReader) == 'undefined'){
+alert("对不起，您的浏览器不支持HTML5(FileReader)功能！")
+}else{
+alert(typeof(FileReader))
+}
+
+if (authData){
+    my3d_value( authData.uid );
+    console.log( "你之前登录过哦 使用原来的uid吧：" + authData.uid );
+}else{
+    ref.authAnonymously( authHandler );
+    console.log( "你还没登录呢 ！ 给你创建个匿名uid中！" );
+}
+function authHandler(error, authData){ //匿名登录
+    if (error){
+        console.log("登录出错! 原因：", error);
+    }else{
+        console.log('匿名登录成功 uid为：'+authData.uid);
+        my3d_value(authData.uid);
+        authData.uid;
+    }
+    ref.child('mydata/'+authData.uid+'/').update({
+        x : '0',
+        y : '0',
+        z : '0'  
+    });
+}
+function my3d_value(e){
+    ref.child('mydata/'+e+'/').on("value", function(snapshot){
+        $('#group').css('transform','rotateY('+snapshot.val().y+'deg) rotateX('+ snapshot.val().x +'deg) rotateZ('+ snapshot.val().z +'deg)');
+    }, function (errorObject){
+        console.log("数据读取出错 原因: " + errorObject.code);
+    });
+
+    function loadImage(url,callback) {       
+        var img = new Image();  
+        img.onload = function(){  
+            img.onload = null;  
+            callback(img);  
+        }  
+        img.src = url;   
+    }
+    function call(img){
+        $(img).appendTo('.img1');
+    }
+    loadImage('http://pan.baidu.com/share/qrcode?w=200&h=200&url=http://myhtml5.oss-cn-shenzhen.aliyuncs.com/tphd/control.html?uid='+e+'',call);  
+}
+</script>
+</html>

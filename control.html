@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />-->
+<meta name="viewport" content="width=320, target-densitydpi=device-dpi, user-scalable=no" />
+<meta name="author" content="xx.cn" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta http-equiv="expires" content="-1" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta http-equiv="Pragma" content="no-cache" />
+<title></title>
+<style>
+    #outer{
+            /*定义视距*/
+            -webkit-perspective:500px;
+            -WebKit-perspective-origin: 50% 50%;
+            -moz-perspective:500px;
+            -moz-perspective-origin: 50% 50%;
+            overflow: hidden;
+    }
+     #group{
+            width: 200px;
+            height: 200px;
+            position: relative;
+            -webkit-transform-style:preserve-3d;
+            -moz-transform-style:preserve-3d;
+            margin: 200px auto;
+            transform-origin:50% 50% -100px !important;
+    }
+     .page{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0.5;
+            overflow: hidden;
+            filter:alpha(opacity=50);
+            font-size:50px;
+            word-break:break-all;
+            word-wrap:break-word;
+    }
+    #page1{
+            background-color: #10a6ce;
+            line-height: 100px;
+    }
+    #page2{
+            background-color: #0073b3;
+            -webkit-transform-origin:right;
+            -webkit-transform:rotateY(-90deg);
+            -moz-transform-origin:right;
+            -moz-transform:rotateY(-90deg);
+            line-height: 100px;
+    }
+    #page3{
+            background-color: #07beea;
+            -webkit-transform-origin:left;
+            -webkit-transform:rotateY(90deg);
+            -moz-transform-origin:left;
+            -moz-transform:rotateY(90deg);
+            line-height: 80px;
+    }
+    #page4{
+            background-color: #29B4F0;
+            -webkit-transform-origin:top;
+            -webkit-transform:rotateX(-90deg);
+            -moz-transform-origin:top;
+            -moz-transform:rotateX(-90deg);
+            line-height: 80px;
+    }
+    #page5{
+             background-color: #6699cc;
+            -webkit-transform-origin:bottom;
+            -webkit-transform:rotateX(90deg);
+            -moz-transform-origin:bottom;
+            -moz-transform:rotateX(90deg);
+             line-height: 50px;
+    }
+    #page6{
+            background-color: #10a6ce;
+            -webkit-transform:translateZ(-200px);
+            -moz-transform:translateZ(-200px);
+            line-height: 50px;
+        }
+        @-moz-keyframes scroll {
+            0% {-moz-transform:rotateY(0deg) rotateX(0deg);}
+            50% {-moz-transform:rotateY(360deg) rotateX(0deg);}
+            100% {-moz-transform:rotateY(360deg) rotateX(360deg);}
+        }
+        @-webkit-keyframes scroll {
+            0% {-webkit-transform:rotateY(0deg) rotateX(0deg);}
+            50% {-webkit-transform:rotateY(360deg) rotateX(0deg);}
+            100% {-webkit-transform:rotateY(360deg) rotateX(360deg);}
+        }
+ #group{
+            width: 200px;
+            height: 200px;
+            position: relative;
+            -webkit-transform-style:preserve-3d;
+            -moz-transform-style:preserve-3d;
+            margin: 200px auto;
+/*            -webkit-animation:scroll 8s linear 0s infinite;
+            -moz-animation:scroll 8s linear 0s infinite;*/
+        }
+</style> 
+<script src='http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js'></script>
+<script src="https://cdn.wilddog.com/js/client/current/wilddog.js"></script>
+</head>
+<body>
+<div id="outer">
+    <div id="group">
+        <div class="page" id="page1">.</div>
+        <div class="page" id="page2">..</div>
+        <div class="page" id="page3">...</div>
+        <div class="page" id="page4">....</div>
+        <div class="page" id="page5">.....</div>
+        <div class="page" id="page6">......</div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">  
+        var ref = new Wilddog("https://gonefour.wilddogio.com/");
+        var x,y,z,itime;
+        if(window.DeviceMotionEvent){  
+          window.addEventListener("deviceorientation", function(event){
+            x = Math.round(event.beta);
+            y = Math.round(event.gamma);
+            z = Math.round(event.alpha);
+            if(x<0){x = Math.abs(x)}else{x = -x};
+            if(y<0){y = Math.abs(y)}else{y = -y};
+            if(z<0){z = Math.abs(z)}else{z = -z};
+            console.log(event);
+            if(!itime){
+                itime = setInterval(function(){
+                    todata(x,y,z)
+                },50)
+            }
+            $('#group').css('transform','rotateY('+y+'deg) rotateX('+ x +'deg) rotateZ('+ z +'deg)')
+          }, false);
+        };
+        function todata(e,e1,e2){
+            ref.child('mydata/'+GetQueryString('uid')+'/').set({
+            "x" : e,
+            "y" : e1,
+            "z" : e2
+            });
+        }
+
+
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+</script>  
+</html>
