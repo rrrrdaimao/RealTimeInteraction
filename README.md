@@ -1,0 +1,3 @@
+# RealTimeInteraction
+一个有趣的手机重力实时互动
+打开index.html的并扫描二维码，与你手机实时对应的模型手机
