@@ -36,11 +36,6 @@
 <script type="text/javascript">  
 var ref = new Wilddog("https://gonefour.wilddogio.com/");
 var authData = ref.getAuth();
-if(typeof(FileReader) == 'undefined'){
-alert("对不起，您的浏览器不支持HTML5(FileReader)功能！")
-}else{
-alert(typeof(FileReader))
-}
 
 if (authData){
     my3d_value( authData.uid );
